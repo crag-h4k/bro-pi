@@ -1,0 +1,1 @@
+gcc -Os -I /usr/include/python3.5m -o run_rgb run_rgb.c -lpython3.5m -lpthread -lm -lutil -ldl
