@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
-from subprocess import check_output, run
+from subprocess import check_output, run, Popen
 from time import sleep
 from sys import argv
+
+from cfg import DEPLOY_DELAY, NETWORK_CONF, NODE_CONF, DEPLOY_CMD, SERVICE_LOCK
 
 
 def make_subnets():
@@ -69,13 +71,12 @@ def make_conf(text_list, outfile):
 
         f.close()
 
-def main(sleep_i):
-    check_service('ssh')
-    make_conf(make_subnets(), '/usr/local/bro/etc/networks.cfg')
-    make_conf(make_node(), '/usr/local/bro/etc/node.cfg')
-    sleep(float(sleep_i))
-    run('broctl deploy &')
+def deploy_bro():
+
+    check_service(SERVICE_LOCK)
+    make_conf(make_subnets(), NETWORK_CONF)
+    make_conf(make_node(), NODE_CONF)
+    sleep(DEPLOY_DELAY)
+    Popen(DEPLOY_CMD,shell=True)
     return 
-#check_iface_state('eth0')
-#make_conf(make_node(), 'node.test')
-main(argv[1])
+
