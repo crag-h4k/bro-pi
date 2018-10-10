@@ -1,6 +1,4 @@
-from subprocess import check_output, run, Popen,call
-from time import sleep
-from sys import argv
+from subprocess import check_output
 
 from cfg import DEPLOY_DELAY, NETWORK_CONF, NODE_CONF, DEPLOY_CMD, SERVICE_LOCK
 
