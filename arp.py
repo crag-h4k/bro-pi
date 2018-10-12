@@ -1,5 +1,5 @@
 # took out conf:1; 
-from scapy.all import srp, Ether, ARP, #conf
+from scapy.all import srp, Ether, ARP#, conf
 from time import sleep
 from datetime import datetime
 from json import dump
@@ -32,7 +32,7 @@ def arp_scan():
             print(H.ipv4, sep, H.mac, sep, H.ts)
             
             hosts.append(H)
-    print(hosts)
+    #print(hosts)
     print('#######')
     return hosts
 
@@ -71,4 +71,4 @@ def continuous_arp():
         except:
             continue
 
-continuous_arp()
+#continuous_arp()
