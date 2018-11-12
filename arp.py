@@ -1,5 +1,5 @@
-# took out conf:1; 
-from scapy.all import srp, Ether, ARP#, conf
+#!/usr/bin/env python3
+from scapy.all import srp, Ether, ARP, conf
 from time import sleep
 from datetime import datetime
 from json import dump
@@ -7,7 +7,6 @@ from requests import get
 
 from utils import make_subnets
 from cfg import ARP_DELAY, ARP_JSON, ARP_CSV, IFACE
-#from rgb import blink_led
 
 class Host:
     def __init__(self, ipv4, subnet, mac, manu=''):
@@ -18,6 +17,11 @@ class Host:
         self.mac = mac
         self.manu = manu
 
+def find_vendor(mac):
+    req = get('http://macvendors.co/api/%s' % mac)
+    manu_data = req.json()
+    return manu_data
+
 def arp_scan():
     subnets = make_subnets()
     sep = '    '
@@ -25,6 +29,7 @@ def arp_scan():
         if '\n' in net:
             net = net.strip('\n')
         #conf.verb = 0
+    #source: https://macvendors.co/api/python
         ans, unans = srp(Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=net),timeout=2, iface=IFACE, inter=0.1)
         hosts = []
 
@@ -40,12 +45,6 @@ def arp_scan():
     #print(hosts)
     print('#######')
     return hosts
-
-def find_vendor(mac):
-    #source: https://macvendors.co/api/python
-    req = get('http://macvendors.co/api/%s' % mac)
-    manu_data = req.json()
-    return manu_data
 
 def write_arp_csv(host_arr, fname):
 
@@ -71,15 +70,12 @@ def write_arp_json(host_arr, fname):
     return
 
 def continuous_arp():
-
     while True:
-        #try:
         print('init arp scan')
         write_arp_json(arp_scan(), ARP_JSON)
         #write_arp_csv(arp_scan(), ARP_CSV
-        #blink_led(purple)
         sleep(ARP_DELAY)
 
-
-#find_vendor('14:18:77:17:12:ba')
-continuous_arp()
+#continuous_arp()
+arp_results = arp_scan()
+write_arp_json(arp_results, ARP_JSON)

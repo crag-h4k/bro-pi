@@ -1,4 +1,5 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+
 from arp import continuous_arp
 from auto_bro import deploy_bro
 

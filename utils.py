@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from subprocess import check_output
 
 from cfg import DEPLOY_DELAY, NETWORK_CONF, NODE_CONF, DEPLOY_CMD, SERVICE_LOCK
