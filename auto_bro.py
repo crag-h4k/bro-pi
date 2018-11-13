@@ -12,10 +12,7 @@ def deploy_bro():
     check_service(SERVICE_LOCK)
     make_conf(make_subnets(), NETWORK_CONF)
     make_conf(make_node(), NODE_CONF)
-    #blink_led(orange)
-    sleep(DEPLOY_DELAY)
-    #blink_led(yellow)
-    Popen(DEPLOY_CMD,shell=True)
-    #blink_led(green)
+    #sleep(DEPLOY_DELAY)
+    #Popen(DEPLOY_CMD,shell=True)
     return 
 deploy_bro()

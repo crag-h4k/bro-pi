@@ -28,7 +28,7 @@ def arp_scan():
     for net in subnets:
         if '\n' in net:
             net = net.strip('\n')
-        #conf.verb = 0
+        conf.verb = 0
     #source: https://macvendors.co/api/python
         ans, unans = srp(Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=net),timeout=2, iface=IFACE, inter=0.1)
         hosts = []
@@ -39,11 +39,11 @@ def arp_scan():
             manu = find_vendor(mac)
 
             H = Host(ipv4, net, mac, manu)
-            print(H.ts, H.ipv4, sep, H.mac, sep, H.manu)
+            #print(H.ts, H.ipv4, sep, H.mac, sep, H.manu)
             
             hosts.append(H)
     #print(hosts)
-    print('#######')
+    #print('#######')
     return hosts
 
 def write_arp_csv(host_arr, fname):
@@ -61,7 +61,7 @@ def write_arp_json(host_arr, fname):
     data[json_name] = []
 
     for H in host_arr:
-        print(H.ts, H.ipv4, H.mac, H.manu)
+        #print(H.ts, H.ipv4, H.mac, H.manu)
         data[json_name].append({'ts':H.ts, 'ipv4':H.ipv4, 'mac':H.mac, 'manu':H.manu})
 
     with open(fname, 'a+') as f:
@@ -71,11 +71,11 @@ def write_arp_json(host_arr, fname):
 
 def continuous_arp():
     while True:
-        print('init arp scan')
-        write_arp_json(arp_scan(), ARP_JSON)
+        arp_results = arp_scan()
+        write_arp_json(arp_results, ARP_JSON)
         #write_arp_csv(arp_scan(), ARP_CSV
         sleep(ARP_DELAY)
 
-#continuous_arp()
-arp_results = arp_scan()
-write_arp_json(arp_results, ARP_JSON)
+continuous_arp()
+#arp_results = arp_scan()
+#write_arp_json(arp_results, ARP_JSON)
